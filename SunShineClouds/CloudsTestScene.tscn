@@ -1,0 +1,56 @@
+[gd_scene load_steps=7 format=3 uid="uid://dqlh6bs8vof4i"]
+
+[ext_resource type="Environment" uid="uid://dgwki8y1f6sbc" path="res://SunShineClouds/ExampleWorldEnvironment.tres" id="1_6dkif"]
+[ext_resource type="Material" uid="uid://w51h2mxxopag" path="res://SunShineClouds/CloudsMaterial.tres" id="1_ieigl"]
+[ext_resource type="Script" path="res://SunShineClouds/CloudsController.gd" id="2_1iomj"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vkiku"]
+albedo_color = Color(0.0431373, 0.027451, 0.0117647, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dmlx4"]
+albedo_color = Color(0.556863, 0, 0.156863, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_fibol"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.486132, -0.509528, -0.70997, -0.0608152, -0.790734, 0.609132, -0.871767, 0.339295, 0.353414, 0, 0, 0)
+light_color = Color(0.980392, 0.894118, 0.847059, 1)
+light_angular_distance = 6.29
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource("1_6dkif")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -234.102, 0)
+size = Vector3(1000, 1, 1000)
+material = SubResource("StandardMaterial3D_vkiku")
+
+[node name="CSGSphere3D" type="CSGSphere3D" parent="."]
+transform = Transform3D(1.94961, 0, 0, 0, 1.94961, 0, 0, 0, 1.94961, 749.08, 155.48, 181.036)
+radius = 328.697
+material = SubResource("StandardMaterial3D_dmlx4")
+
+[node name="CloudQuad" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28.1709, 35.6797, -5.49963)
+cast_shadow = 0
+extra_cull_margin = 16384.0
+ignore_occlusion_culling = true
+mesh = SubResource("QuadMesh_fibol")
+surface_material_override/0 = ExtResource("1_ieigl")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -126.099, -231.329, 192.592)
+light_color = Color(0.270588, 0.313726, 0.490196, 1)
+light_energy = 1000.0
+light_volumetric_fog_energy = 16.0
+omni_range = 10.0
+
+[node name="CloudsController" type="Node" parent="." node_paths=PackedStringArray("SunLight")]
+script = ExtResource("2_1iomj")
+SunLight = NodePath("../DirectionalLight3D")
+SkyMaterial = ExtResource("1_ieigl")
+OptionalWorldEnvironment = ExtResource("1_6dkif")
+DefaultAmbientLightColor = Color(0.470588, 0.470588, 0.470588, 1)

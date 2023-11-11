@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3 uid="uid://bsegolgchshnr"]
+
+[ext_resource type="Script" path="res://SunShineClouds/CloudsController.gd" id="1_odtsd"]
+[ext_resource type="Material" uid="uid://w51h2mxxopag" path="res://SunShineClouds/CloudsMaterial.tres" id="2_ptdf4"]
+[ext_resource type="Environment" uid="uid://dgwki8y1f6sbc" path="res://SunShineClouds/ExampleWorldEnvironment.tres" id="3_1hge8"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_rg3kl"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="CloudsController" type="Node" parent="." node_paths=PackedStringArray("SunLight")]
+script = ExtResource("1_odtsd")
+SunLight = NodePath("../DirectionalLight3D")
+SkyMaterial = ExtResource("2_ptdf4")
+
+[node name="CloudQuad" type="MeshInstance3D" parent="CloudsController"]
+cast_shadow = 0
+extra_cull_margin = 16384.0
+ignore_occlusion_culling = true
+mesh = SubResource("QuadMesh_rg3kl")
+surface_material_override/0 = ExtResource("2_ptdf4")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.506591, 0.862187, 0, -0.862187, 0.506591, 0, 0, 0)
+light_angular_distance = 5.9
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource("3_1hge8")

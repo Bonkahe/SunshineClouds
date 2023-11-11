@@ -1,0 +1,83 @@
+[gd_resource type="ShaderMaterial" load_steps=11 format=3 uid="uid://w51h2mxxopag"]
+
+[ext_resource type="Shader" path="res://SunShineClouds/RayMarchedCloudsPost.gdshader" id="1_ldym3"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_gkfdv"]
+frequency = 0.0601
+fractal_lacunarity = 3.26
+
+[sub_resource type="NoiseTexture3D" id="NoiseTexture3D_d3qyp"]
+width = 256
+height = 512
+depth = 256
+seamless = true
+noise = SubResource("FastNoiseLite_gkfdv")
+
+[sub_resource type="Gradient" id="Gradient_1xph8"]
+offsets = PackedFloat32Array(0, 0.0870712, 0.242744, 0.604222, 0.875989, 0.944591, 1)
+colors = PackedColorArray(0, 0, 0, 1, 1, 1, 1, 1, 0.712129, 0.71213, 0.712128, 1, 1, 1, 1, 1, 0.359068, 0.35907, 0.359068, 1, 0.912289, 0.912289, 0.912289, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_liavw"]
+gradient = SubResource("Gradient_1xph8")
+
+[sub_resource type="Gradient" id="Gradient_wedq6"]
+offsets = PackedFloat32Array(0.493404, 0.751979)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_fr4y7"]
+noise_type = 2
+frequency = 0.2182
+
+[sub_resource type="NoiseTexture3D" id="NoiseTexture3D_ypbqc"]
+seamless = true
+seamless_blend_skirt = 0.212
+color_ramp = SubResource("Gradient_wedq6")
+noise = SubResource("FastNoiseLite_fr4y7")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_xy8t4"]
+noise_type = 0
+frequency = 0.0811
+fractal_lacunarity = 3.06
+fractal_gain = 0.15
+domain_warp_type = 1
+
+[sub_resource type="NoiseTexture3D" id="NoiseTexture3D_0ire8"]
+width = 256
+height = 256
+depth = 256
+seamless = true
+noise = SubResource("FastNoiseLite_xy8t4")
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_ldym3")
+shader_parameter/StartingPointNoisePower = 5.0
+shader_parameter/SunDirection = Vector3(0, 0.862187, 0.506591)
+shader_parameter/WindDirection = Vector2(1, 0)
+shader_parameter/WindSpeed = 0.003
+shader_parameter/noise_scale = 0.27
+shader_parameter/large_scale_noise_scale = 0.115
+shader_parameter/large_scale_noise_power = 1.199
+shader_parameter/detail_noise_scale = 1.025
+shader_parameter/detail_noise_power = 0.209
+shader_parameter/cloudCutoff = 0.256
+shader_parameter/cloudSoftness = 0.036
+shader_parameter/UseFog = true
+shader_parameter/CloudFogMaxDistance = 10000.0
+shader_parameter/CloudFogColor = Color(0.494118, 0.572549, 0.654902, 1)
+shader_parameter/CloudBaseColor = Color(1, 1, 1, 1)
+shader_parameter/CloudShadowColor = Color(0, 0, 0, 1)
+shader_parameter/CloudFloor = 80.0
+shader_parameter/CloudCeiling = 2000.0
+shader_parameter/StepDistanceClose = 20.0
+shader_parameter/StepDistanceFar = 200.0
+shader_parameter/StepCount = 400
+shader_parameter/LightingStepDistance = 10.0
+shader_parameter/LightingStepCount = 40
+shader_parameter/CloudDensity = 0.95
+shader_parameter/DensityCutoff = 1.0
+shader_parameter/CloudMaxDistance = 10000.0
+shader_parameter/CloudMaxDistanceFalloff = 3000.0
+shader_parameter/HeightWeightGradient = SubResource("GradientTexture1D_liavw")
+shader_parameter/NoiseTexture = SubResource("NoiseTexture3D_0ire8")
+shader_parameter/LargeShapeNoiseTexture = SubResource("NoiseTexture3D_ypbqc")
+shader_parameter/DetailNoiseTexture = SubResource("NoiseTexture3D_d3qyp")
