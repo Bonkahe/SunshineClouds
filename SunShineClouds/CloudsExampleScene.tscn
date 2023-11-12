@@ -21,7 +21,7 @@ mesh = SubResource("QuadMesh_rg3kl")
 surface_material_override/0 = ExtResource("2_ptdf4")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.506591, 0.862187, 0, -0.862187, 0.506591, 0, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 0.861408, 0.507914, 0, -0.507914, 0.861408, 0, 0, 0)
 light_angular_distance = 5.9
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]

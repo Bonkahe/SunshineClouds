@@ -15,7 +15,7 @@ albedo_color = Color(0.556863, 0, 0.156863, 1)
 [node name="Node3D" type="Node3D"]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.486132, -0.509528, -0.70997, -0.0608152, -0.790734, 0.609132, -0.871767, 0.339295, 0.353414, 0, 0, 0)
+transform = Transform3D(-0.446418, -0.8118, 0.37642, 0.0342937, 0.404833, 0.913747, -0.894167, 0.420822, -0.152885, 0, 0, 0)
 light_color = Color(0.980392, 0.894118, 0.847059, 1)
 light_angular_distance = 6.29
 shadow_enabled = true
@@ -33,14 +33,6 @@ transform = Transform3D(1.94961, 0, 0, 0, 1.94961, 0, 0, 0, 1.94961, 749.08, 155
 radius = 328.697
 material = SubResource("StandardMaterial3D_dmlx4")
 
-[node name="CloudQuad" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28.1709, 35.6797, -5.49963)
-cast_shadow = 0
-extra_cull_margin = 16384.0
-ignore_occlusion_culling = true
-mesh = SubResource("QuadMesh_fibol")
-surface_material_override/0 = ExtResource("1_ieigl")
-
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -126.099, -231.329, 192.592)
 light_color = Color(0.270588, 0.313726, 0.490196, 1)
@@ -54,3 +46,12 @@ SunLight = NodePath("../DirectionalLight3D")
 SkyMaterial = ExtResource("1_ieigl")
 OptionalWorldEnvironment = ExtResource("1_6dkif")
 DefaultAmbientLightColor = Color(0.470588, 0.470588, 0.470588, 1)
+
+[node name="CloudQuad" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 120.402, 4463.88)
+cast_shadow = 0
+extra_cull_margin = 16384.0
+custom_aabb = AABB(0, 0, 0, 1e+08, 1e+08, 1e+07)
+ignore_occlusion_culling = true
+mesh = SubResource("QuadMesh_fibol")
+surface_material_override/0 = ExtResource("1_ieigl")

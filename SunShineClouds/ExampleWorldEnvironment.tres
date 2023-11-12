@@ -20,4 +20,4 @@ fog_enabled = true
 fog_light_color = Color(0.494118, 0.572549, 0.654902, 1)
 fog_density = 0.0001
 fog_aerial_perspective = 0.353
-volumetric_fog_density = 0.01
+volumetric_fog_density = 0.0585
