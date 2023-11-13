@@ -1,14 +1,18 @@
-[gd_resource type="NoiseTexture3D" load_steps=3 format=3 uid="uid://by60jygmd4voq"]
+[gd_resource type="NoiseTexture3D" load_steps=3 format=3 uid="uid://duqxdvvkivpvw"]
 
-[sub_resource type="Gradient" id="Gradient_eum1w"]
-offsets = PackedFloat32Array(0.493404, 0.751979)
+[sub_resource type="Gradient" id="Gradient_2r4es"]
+offsets = PackedFloat32Array(0.474719, 0.859551)
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_8ahlj"]
-noise_type = 2
-frequency = 0.2182
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_dhy6v"]
+frequency = 0.032
+fractal_lacunarity = 3.26
 
 [resource]
+width = 256
+height = 256
+depth = 256
+invert = true
 seamless = true
-seamless_blend_skirt = 0.212
-color_ramp = SubResource("Gradient_eum1w")
-noise = SubResource("FastNoiseLite_8ahlj")
+seamless_blend_skirt = 0.2
+color_ramp = SubResource("Gradient_2r4es")
+noise = SubResource("FastNoiseLite_dhy6v")

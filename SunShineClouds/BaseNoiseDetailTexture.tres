@@ -1,13 +1,14 @@
 [gd_resource type="NoiseTexture3D" load_steps=2 format=3 uid="uid://dt4lbhlv68dai"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_qhirv"]
-frequency = 0.0601
+frequency = 0.0499
 fractal_lacunarity = 3.26
 
 [resource]
 width = 256
-height = 512
+height = 256
 depth = 256
 invert = true
 seamless = true
+seamless_blend_skirt = 0.2
 noise = SubResource("FastNoiseLite_qhirv")

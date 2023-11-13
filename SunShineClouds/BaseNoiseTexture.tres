@@ -2,7 +2,7 @@
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_7wm23"]
 noise_type = 0
-frequency = 0.0811
+frequency = 0.0623
 fractal_lacunarity = 3.06
 fractal_gain = 0.15
 domain_warp_type = 1
@@ -12,4 +12,6 @@ width = 256
 height = 256
 depth = 256
 seamless = true
+seamless_blend_skirt = 0.2
+normalize = false
 noise = SubResource("FastNoiseLite_7wm23")

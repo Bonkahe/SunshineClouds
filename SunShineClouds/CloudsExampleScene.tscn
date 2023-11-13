@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://bsegolgchshnr"]
+[gd_scene load_steps=6 format=3 uid="uid://bsegolgchshnr"]
 
 [ext_resource type="Script" path="res://SunShineClouds/CloudsController.gd" id="1_odtsd"]
 [ext_resource type="Material" uid="uid://w51h2mxxopag" path="res://SunShineClouds/CloudsMaterial.tres" id="2_ptdf4"]
 [ext_resource type="Environment" uid="uid://dgwki8y1f6sbc" path="res://SunShineClouds/ExampleWorldEnvironment.tres" id="3_1hge8"]
+[ext_resource type="Material" uid="uid://cwo0bqbn0sgb7" path="res://SunShineClouds/CloudsMatDefault.tres" id="3_v6egw"]
 
 [sub_resource type="QuadMesh" id="QuadMesh_rg3kl"]
 
@@ -18,7 +19,7 @@ cast_shadow = 0
 extra_cull_margin = 16384.0
 ignore_occlusion_culling = true
 mesh = SubResource("QuadMesh_rg3kl")
-surface_material_override/0 = ExtResource("2_ptdf4")
+surface_material_override/0 = ExtResource("3_v6egw")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.861408, 0.507914, 0, -0.507914, 0.861408, 0, 0, 0)

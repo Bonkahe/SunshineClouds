@@ -1,57 +1,97 @@
-[gd_scene load_steps=7 format=3 uid="uid://dqlh6bs8vof4i"]
+[gd_scene load_steps=9 format=3 uid="uid://dqlh6bs8vof4i"]
 
 [ext_resource type="Environment" uid="uid://dgwki8y1f6sbc" path="res://SunShineClouds/ExampleWorldEnvironment.tres" id="1_6dkif"]
-[ext_resource type="Material" uid="uid://w51h2mxxopag" path="res://SunShineClouds/CloudsMaterial.tres" id="1_ieigl"]
 [ext_resource type="Script" path="res://SunShineClouds/CloudsController.gd" id="2_1iomj"]
+[ext_resource type="Material" uid="uid://cuhyottjxt7xb" path="res://SunShineClouds/CloudsMatHighQuality.tres" id="4_1cn44"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vkiku"]
 albedo_color = Color(0.0431373, 0.027451, 0.0117647, 1)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dmlx4"]
-albedo_color = Color(0.556863, 0, 0.156863, 1)
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_3nrao"]
 
 [sub_resource type="QuadMesh" id="QuadMesh_fibol"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_ym8im"]
+top_radius = 200.0
+bottom_radius = 200.0
+height = 2000.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dmlx4"]
+albedo_color = Color(0.556863, 0, 0.156863, 1)
 
 [node name="Node3D" type="Node3D"]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.446418, -0.8118, 0.37642, 0.0342937, 0.404833, 0.913747, -0.894167, 0.420822, -0.152885, 0, 0, 0)
-light_color = Color(0.980392, 0.894118, 0.847059, 1)
-light_angular_distance = 6.29
+transform = Transform3D(-0.446418, -0.862607, 0.237949, 0.0342937, 0.249229, 0.967837, -0.894167, 0.44022, -0.0816784, 0, 0, 0)
+light_color = Color(0.992157, 0.972549, 0.92549, 1)
 shadow_enabled = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = ExtResource("1_6dkif")
 
-[node name="CSGBox3D" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -234.102, 0)
-size = Vector3(1000, 1, 1000)
+[node name="Platform" type="CSGBox3D" parent="."]
+size = Vector3(30, 1, 30)
 material = SubResource("StandardMaterial3D_vkiku")
 
-[node name="CSGSphere3D" type="CSGSphere3D" parent="."]
-transform = Transform3D(1.94961, 0, 0, 0, 1.94961, 0, 0, 0, 1.94961, 749.08, 155.48, 181.036)
-radius = 328.697
-material = SubResource("StandardMaterial3D_dmlx4")
+[node name="PlayerRef" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.51398, 0)
+mesh = SubResource("CapsuleMesh_3nrao")
+skeleton = NodePath("../OmniLight3D")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -126.099, -231.329, 192.592)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.33669, 2.5402, 0.907418)
+visible = false
 light_color = Color(0.270588, 0.313726, 0.490196, 1)
-light_energy = 1000.0
+light_energy = 10.0
 light_volumetric_fog_energy = 16.0
 omni_range = 10.0
 
 [node name="CloudsController" type="Node" parent="." node_paths=PackedStringArray("SunLight")]
 script = ExtResource("2_1iomj")
 SunLight = NodePath("../DirectionalLight3D")
-SkyMaterial = ExtResource("1_ieigl")
+SkyMaterial = ExtResource("4_1cn44")
 OptionalWorldEnvironment = ExtResource("1_6dkif")
 DefaultAmbientLightColor = Color(0.470588, 0.470588, 0.470588, 1)
 
 [node name="CloudQuad" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 120.402, 4463.88)
 cast_shadow = 0
 extra_cull_margin = 16384.0
 custom_aabb = AABB(0, 0, 0, 1e+08, 1e+08, 1e+07)
 ignore_occlusion_culling = true
 mesh = SubResource("QuadMesh_fibol")
-surface_material_override/0 = ExtResource("1_ieigl")
+surface_material_override/0 = ExtResource("4_1cn44")
+
+[node name="Pillar" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1318.16, 770.702, -322.57)
+mesh = SubResource("CylinderMesh_ym8im")
+surface_material_override/0 = SubResource("StandardMaterial3D_dmlx4")
+
+[node name="Pillar2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1318.16, 770.702, -2340.57)
+mesh = SubResource("CylinderMesh_ym8im")
+surface_material_override/0 = SubResource("StandardMaterial3D_dmlx4")
+
+[node name="Pillar3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1318.16, 770.702, -4404.57)
+mesh = SubResource("CylinderMesh_ym8im")
+surface_material_override/0 = SubResource("StandardMaterial3D_dmlx4")
+
+[node name="Pillar4" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1318.16, 770.702, -6393.57)
+mesh = SubResource("CylinderMesh_ym8im")
+surface_material_override/0 = SubResource("StandardMaterial3D_dmlx4")
+
+[node name="Pillar5" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1318.16, 770.702, -8411.57)
+mesh = SubResource("CylinderMesh_ym8im")
+surface_material_override/0 = SubResource("StandardMaterial3D_dmlx4")
+
+[node name="Pillar6" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1318.16, 770.702, -10475.6)
+mesh = SubResource("CylinderMesh_ym8im")
+surface_material_override/0 = SubResource("StandardMaterial3D_dmlx4")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(0.891007, 0.147805, 0.429256, 0, 0.945519, -0.325568, -0.453991, 0.290083, 0.842463, 4.517, 1.323, 9.946)
+fov = 90.0
+far = 15000.0
