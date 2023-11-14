@@ -31,3 +31,5 @@ A procedural cloud system for Godot 4.2 designed from the ground up to be as ext
 * AMD gpu consistent issues, currently do not have an AMD gpu to test on.
 
 
+## License
+This plugin has been released under the [MIT License](https://github.com/Bonkahe/SunshineClouds/blob/main/LICENSE).
