@@ -1,6 +1,7 @@
 <img src="https://github.com/Bonkahe/SunshineClouds/blob/main/GithubStuff/ProcCloudsGithubLogo.png">
 
 # SunshineClouds
+This project is current Experimental.
 A procedural cloud system for Godot 4.2 designed from the ground up to be as extendable, and barebones as possible while still looking as good as possible.
 
 ## Features
@@ -24,7 +25,7 @@ A procedural cloud system for Godot 4.2 designed from the ground up to be as ext
 6. Set CloudsController Sky Material to your selected material (the one you put into the MeshInstance3D)
 7. Optionally: Add your environment resource to the OptionalWorldEnvironment variable in the CloudsController.
 
-## Requiring Continued Work (Currently Experimental)
+## Requiring Continued Work
 * Pixel errors occur when settings set on too high of a quality
 * AMD gpu consistent issues, currently do not have an AMD gpu to test on.
 
