@@ -10,9 +10,9 @@ uniform float WindSpeed = 0.003;
 
 group_uniforms SmoothingControls;
 // Offsets the origin depth by a dither matrix multiplied by this and the step distance, prevents banding.
-uniform float StartingPointNoisePower: hint_range(0,40) = 25.0;
+uniform float StartingPointNoisePower: hint_range(0,40) = 5.652;
 uniform float ditherspeed: hint_range(0,1000) = 1000.0;
-uniform float StepDepthBlendRange = 60.0;
+uniform float StepDepthBlendRange = 100.0;
 
 group_uniforms NoiseControls;
 // Also needs to be pushed to global shader variables, when paired with noise texture will allow fake shadows on terrain.
@@ -24,8 +24,8 @@ uniform float detail_noise_scale: hint_range(0,10) = 5.921;
 uniform float detail_noise_power: hint_range(-1,1) = 0.788;
 
 group_uniforms DensityControls;
-uniform float cloudCutoff: hint_range(0,1) = 0.245;
-uniform float cloudSoftness: hint_range(0,1) = 0.215;
+uniform float cloudCutoff: hint_range(0,1) = 0.199;
+uniform float cloudSoftness: hint_range(0,1) = 0.5;
 
 // Used to create the clouds deck, with all clouds occuring between these parameters in world space.
 uniform float CloudFloor = 80.0;
@@ -54,8 +54,8 @@ uniform float StepDistanceClose = 20.0;
 uniform float StepDistanceFar = 150.0;
 uniform int StepCount = 100;
 // be aware as you step up the lighting cloud count, you will need to step down the distance, as the total shadows and divided by the step count.
-uniform float LightingStepDistance = 20.0;
-uniform int LightingStepCount = 25;
+uniform float LightingStepDistance = 100.0;
+uniform int LightingStepCount = 5;
 
 
 group_uniforms Textures;
@@ -152,11 +152,13 @@ void fragment() {
 	origin += view_dir * dither;
 	
 	vec3 cur_pos = origin;
+	vec3 lighting_pos = cur_pos;
 	float cur_distance = 0.0;
 	float currentDensity = 0.0;
 	float thisDensity = 0.0;
 	vec3 currentColor = vec3(0.5);
 	float cutoffvalue = 0.0;
+	float shadow = 0.0;
 	
 	if (cur_pos.y < CloudFloor && view_dir.y < 0.0 || cur_pos.y > CloudCeiling && view_dir.y > 0.0){discard;}
 	
@@ -164,24 +166,25 @@ void fragment() {
 		cur_distance += mix(StepDistanceClose, StepDistanceFar, ease_out_quad(0.0,1.0,float(i) / float(StepCount)));
 		cur_pos = origin + view_dir * cur_distance;
 		
-		thisDensity = samplecloudmap(cur_pos, time)  * CloudDensity;
+		thisDensity = samplecloudmap(cur_pos, time) * CloudDensity;
 		currentColor = mix(currentColor, CloudBaseColor, thisDensity);
 		currentDensity += thisDensity * smoothstep(linear_depth, linear_depth - StepDepthBlendRange, cur_distance);
 		//cutoffvalue = CheckOutOfBounds(cur_pos, view_dir);
 		cutoffvalue = max(max(cur_distance - linear_depth, currentDensity - DensityCutoff), CheckOutOfBounds(cur_pos, view_dir));
-		if (cutoffvalue > 0.1){break;}
+		if (cutoffvalue > 0.0){break;}
+		lighting_pos = cur_pos + SunDirection * dither;
+		for (int j = 0; j < LightingStepCount; j++) {
+			shadow += (samplecloudmap(lighting_pos, time) * CloudDensity);
+			
+			lighting_pos += SunDirection * LightingStepDistance;
+		}
+		shadow /= float(LightingStepCount);
 	}
-	float shadow = 0.0;
-	cur_pos += SunDirection * dither;
-	for (int j = 0; j < LightingStepCount; j++) {
-		shadow += (samplecloudmap(cur_pos, time) * CloudDensity);
-		
-		cur_pos += SunDirection * LightingStepDistance;
-	}
-	shadow /= float(LightingStepCount);
 	
-	currentDensity = mix(clamp(currentDensity, 0.0, 1.0), 0.0, clamp(((cur_distance - CloudMaxDistance) / CloudMaxDistanceFalloff) + 1.0, 0.0, 1.0));
+
 	
+	//currentDensity = mix(clamp(currentDensity, 0.0, 1.0), 0.0, clamp(((cur_distance - CloudMaxDistance) / CloudMaxDistanceFalloff) + 1.0, 0.0, 1.0));
+	currentDensity = clamp(currentDensity, 0.0, 1.0);
 	//if (currentDensity < 0.001){
 		//discard;
 	//} 
