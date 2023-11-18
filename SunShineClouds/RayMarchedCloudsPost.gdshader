@@ -2,53 +2,63 @@ shader_type spatial;
 render_mode skip_vertex_transform, cull_disabled;
 render_mode unshaded;
 
-// Offsets the origin depth by a dither matrix multiplied by this and the step distance, prevents banding.
-uniform float StartingPointNoisePower: hint_range(0,40) = 5.0;
-
+group_uniforms WorldControls;
 // Needs to be pushed to global shader variables to handle weather and time of day.
 uniform vec3 SunDirection;
 uniform vec2 WindDirection = vec2(1,0);
 uniform float WindSpeed = 0.003;
 
+group_uniforms SmoothingControls;
+// Offsets the origin depth by a dither matrix multiplied by this and the step distance, prevents banding.
+uniform float StartingPointNoisePower: hint_range(0,40) = 25.0;
+uniform float ditherspeed: hint_range(0,1000) = 1000.0;
+uniform float StepDepthBlendRange = 60.0;
+
+group_uniforms NoiseControls;
 // Also needs to be pushed to global shader variables, when paired with noise texture will allow fake shadows on terrain.
 uniform float cloudsGlobalScale =  10000.0;
-uniform float noise_scale: hint_range(0,5) = 0.248;
-uniform float large_scale_noise_scale: hint_range(0,1) = 0.093;
-uniform float large_scale_noise_power: hint_range(0,5) = 2.012;
-uniform float detail_noise_scale: hint_range(0,10) = 0.876;
-uniform float detail_noise_power: hint_range(-1,1) = 0.295;
+uniform float noise_scale: hint_range(0,5) = 1.761;
+uniform float large_scale_noise_scale: hint_range(0,1) = 0.216;
+uniform float large_scale_noise_power: hint_range(0,5) = 2.32;
+uniform float detail_noise_scale: hint_range(0,10) = 5.921;
+uniform float detail_noise_power: hint_range(-1,1) = 0.788;
 
-uniform float cloudCutoff: hint_range(0,1) = 0.158;
-uniform float cloudSoftness: hint_range(0,1) = 0.036;
-uniform float ditherspeed: hint_range(0,1000) = 100.0;
-
-// Driven mostly by clouds controller script, but can be left on manual for specific look.
-uniform bool UseFog = true;
-uniform float CloudFogMaxDistance = 15000;
-uniform vec3 CloudFogColor: source_color = vec3(0.494, 0.573, 0.655);
-uniform vec3 CloudBaseColor: source_color = vec3(1.0,1.0,1.0);
-uniform vec3 CloudShadowColor: source_color = vec3(0.173, 0.2, 0.255);
+group_uniforms DensityControls;
+uniform float cloudCutoff: hint_range(0,1) = 0.788;
+uniform float cloudSoftness: hint_range(0,1) = 0.215;
 
 // Used to create the clouds deck, with all clouds occuring between these parameters in world space.
 uniform float CloudFloor = 80.0;
 uniform float CloudCeiling = 2000.0;
 
-//Blends between step distance close and step distance far to create higher detail closer and longer range clouds functionality.
-uniform float StepDepthBlendRange = 50.0;
-uniform float StepDistanceClose = 10.0;
-uniform float StepDistanceFar = 100.0;
-uniform int StepCount = 150;
-
-// be aware as you step up the lighting cloud count, you will need to step down the distance, as the total shadows and divided by the step count.
-uniform float LightingStepDistance = 10.0;
-uniform int LightingStepCount = 40;
-
 // basic controls for density and cutoff, cloud density may impact fake shadows later on.
 uniform float CloudDensity = 1.0;
-uniform float DensityCutoff = 1.0;
-uniform float CloudMaxDistance = 12000;
+uniform float DensityCutoff = 1.3;
+uniform float CloudMaxDistance = 15000;
 uniform float CloudMaxDistanceFalloff = 5000;
 
+
+group_uniforms FogControls;
+// Driven mostly by clouds controller script, but can be left on manual for specific look.
+uniform bool UseFog = true;
+uniform float CloudFogMaxDistance = 14000;
+group_uniforms ColorControls;
+uniform vec3 CloudFogColor: source_color = vec3(0.494, 0.573, 0.655);
+uniform vec3 CloudBaseColor: source_color = vec3(1.0,1.0,1.0);
+uniform vec3 CloudShadowColor: source_color = vec3(0.173, 0.2, 0.255);
+
+
+group_uniforms QualityControls;
+//Blends between step distance close and step distance far to create higher detail closer and longer range clouds functionality.
+uniform float StepDistanceClose = 20.0;
+uniform float StepDistanceFar = 150.0;
+uniform int StepCount = 100;
+// be aware as you step up the lighting cloud count, you will need to step down the distance, as the total shadows and divided by the step count.
+uniform float LightingStepDistance = 20.0;
+uniform int LightingStepCount = 25;
+
+
+group_uniforms Textures;
 uniform sampler2D depth_texture : source_color, hint_depth_texture;
 // used to create a ramp than controls the vertical axis on the clouds, lets you author clouds a little more detailed, to blend between different types lerp this using c# or gdscript to another gradient.
 uniform sampler2D HeightWeightGradient;
@@ -134,9 +144,8 @@ void fragment() {
 	
 	vec3 origin = world.xyz;
 	float time = TIME;
-	vec2 fragCoord = vec2(FRAGCOORD.x + sin(time * ditherspeed) * ditherspeed, FRAGCOORD.y + (sin(time * ditherspeed) * ditherspeed));
 	
-	float dither = dither_matrix[int(fragCoord.x) % 4][int(fragCoord.y) % 4];
+	float dither = dither_matrix[int(FRAGCOORD.x + time * ditherspeed) % 4][int(FRAGCOORD.y + time  * ditherspeed) % 4];
 	
 	dither = (dither * StepDistanceClose * StartingPointNoisePower);
 	dither -= (StepDistanceClose * StartingPointNoisePower) / 2.0;
@@ -171,7 +180,10 @@ void fragment() {
 	shadow /= float(LightingStepCount);
 	
 	currentDensity = mix(clamp(currentDensity, 0.0, 1.0), 0.0, clamp(((cur_distance - CloudMaxDistance) / CloudMaxDistanceFalloff) + 1.0, 0.0, 1.0));
-
+	
+	//if (currentDensity < 0.001){
+		//discard;
+	//} 
 	vec3 color = mix(CloudShadowColor, CloudBaseColor, clamp(1.0 - shadow, 0.0, 1.0));
 	//float fogStrength = mix(0.0, 1.0, clamp(cur_distance / CloudFogMaxDistance, 0.0, 1.0));
 	//color = mix(color, CloudFogColor, fogStrength);

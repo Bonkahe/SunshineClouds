@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://dqlh6bs8vof4i"]
+[gd_scene load_steps=10 format=3 uid="uid://dqlh6bs8vof4i"]
 
 [ext_resource type="Environment" uid="uid://dgwki8y1f6sbc" path="res://SunShineClouds/ExampleWorldEnvironment.tres" id="1_6dkif"]
 [ext_resource type="Script" path="res://SunShineClouds/CloudsController.gd" id="2_1iomj"]
 [ext_resource type="Material" uid="uid://cuhyottjxt7xb" path="res://SunShineClouds/CloudsMatHighQuality.tres" id="4_1cn44"]
+[ext_resource type="Material" uid="uid://dd56hlyjinqik" path="res://SunShineClouds/CloudsMatLowQuality.tres" id="4_phbqg"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vkiku"]
 albedo_color = Color(0.0431373, 0.027451, 0.0117647, 1)
@@ -10,6 +11,7 @@ albedo_color = Color(0.0431373, 0.027451, 0.0117647, 1)
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_3nrao"]
 
 [sub_resource type="QuadMesh" id="QuadMesh_fibol"]
+flip_faces = true
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_ym8im"]
 top_radius = 200.0
@@ -59,7 +61,7 @@ extra_cull_margin = 16384.0
 custom_aabb = AABB(0, 0, 0, 1e+08, 1e+08, 1e+07)
 ignore_occlusion_culling = true
 mesh = SubResource("QuadMesh_fibol")
-surface_material_override/0 = ExtResource("4_1cn44")
+surface_material_override/0 = ExtResource("4_phbqg")
 
 [node name="Pillar" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1318.16, 770.702, -322.57)
