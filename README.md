@@ -1,13 +1,14 @@
 <img src="https://github.com/Bonkahe/SunshineClouds/blob/main/GithubStuff/ProcCloudsGithubLogo.png">
 
 # SunshineClouds
-This project is current Experimental.
+This project is currently work in progress, but should be usable in game.
 
 A procedural cloud system for Godot 4.2 designed from the ground up to be as extendable, and barebones as possible while still looking as good as possible.
 
 ## Features
 * Fully volumetric clouds, extendable and performant up too 30km away from camera.
 * Extremely extendable, requires nothing to run beyond a single MeshInstance3D containing quad, can add other features later on.
+* Alternate more high quality lighting model which is more performance demanding.
 * Very barebones and simple script to set the material variables to the world (updates sun rotation, environment settings, fog etc.)
 
 ## Installation
@@ -15,7 +16,7 @@ A procedural cloud system for Godot 4.2 designed from the ground up to be as ext
 2. Pull ["SunShineClouds"](https://github.com/Bonkahe/SunshineClouds/tree/main/SunShineClouds) folder into your project in a out of the way location.
 
 ### Installation Cont. Option A:
-1. Add ["CloudsExampleScene.tscn"](https://github.com/Bonkahe/SunshineClouds/blob/main/SunShineClouds/CloudsExampleScene.tscn) to your scene, works out of the gate but contains a directional light and environment.
+1. Add ["CloudsPrefab.tscn"](https://github.com/Bonkahe/SunshineClouds/blob/main/SunShineClouds/CloudsPrefab.tscn) to your scene, works out of the gate, but will need to be plugged into your directional light and enviroment.
 
 ### Installation Cont. Option B:
 1. Add MeshInstance3D to your scene.
@@ -33,11 +34,8 @@ implemented in as many projects as easily as possible.
 That being said if you do anything in these regards by all means make a new repo and send me a message, I will make an addons section in this readme with a link to your project.
 
 ### Current outstanding issues
-* Pixel errors occur when settings set on too high of a quality
-* AMD gpu consistent issues, currently do not have an AMD gpu to test on
-* Banding issue on nearby terrain/objects
-* More gradual opacity near the player is needed it allow it to function as if it is fog when close to player
-* Performance improvements and general stability
+* Slight depth error at edges of camera, more noticable at further distance, need to apply fisheye effect to depth to counteract this.
+* Continued Performance improvements and general stability
 
 
 ## License
