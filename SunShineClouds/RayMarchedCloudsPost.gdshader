@@ -34,6 +34,7 @@ uniform float CloudFloor = 80.0;
 uniform float CloudCeiling = 2000.0;
 
 //Blends between step distance close and step distance far to create higher detail closer and longer range clouds functionality.
+uniform float StepDepthBlendRange = 50.0;
 uniform float StepDistanceClose = 10.0;
 uniform float StepDistanceFar = 100.0;
 uniform int StepCount = 150;
@@ -111,6 +112,10 @@ float ease_out_quad(float start, float end, float value){
 	return -end * value * (value - 2.0) + start;
 }
 
+float CheckOutOfBounds(vec3 position, vec3 vector){
+	return  1.0 - max(clamp(max(position.y - CloudFloor, vector.y), 0.0, 1.0), 1.0 - clamp(min(position.y - CloudCeiling,vector.y), 0.0, 1.0));
+}
+
 void fragment() {
 	float depth = texture(depth_texture, SCREEN_UV).x;
 	vec3 ndc = vec3(SCREEN_UV * 2.0 - 1.0, depth);
@@ -138,11 +143,13 @@ void fragment() {
 	origin += view_dir * dither;
 	
 	vec3 cur_pos = origin;
-	float cur_distance;
-	float currentDensity;
-	float thisDensity;
+	float cur_distance = 0.0;
+	float currentDensity = 0.0;
+	float thisDensity = 0.0;
 	vec3 currentColor = vec3(0.5);
-	float cutoffvalue;
+	float cutoffvalue = 0.0;
+	
+	if (cur_pos.y < CloudFloor && view_dir.y < 0.0 || cur_pos.y > CloudCeiling && view_dir.y > 0.0){discard;}
 	
 	for (int i = 0; i < StepCount; i++) {
 		cur_distance += mix(StepDistanceClose, StepDistanceFar, ease_out_quad(0.0,1.0,float(i) / float(StepCount)));
@@ -150,11 +157,12 @@ void fragment() {
 		
 		thisDensity = samplecloudmap(cur_pos, time)  * CloudDensity;
 		currentColor = mix(currentColor, CloudBaseColor, thisDensity);
-		currentDensity += thisDensity;
-		cutoffvalue = max( cur_distance - linear_depth, currentDensity - DensityCutoff);
-		if (cutoffvalue > 0.0){break;}
+		currentDensity += thisDensity * smoothstep(linear_depth, linear_depth - StepDepthBlendRange, cur_distance);
+		//cutoffvalue = CheckOutOfBounds(cur_pos, view_dir);
+		cutoffvalue = max(max(cur_distance - linear_depth, currentDensity - DensityCutoff), CheckOutOfBounds(cur_pos, view_dir));
+		if (cutoffvalue > 0.1){break;}
 	}
-	float shadow;
+	float shadow = 0.0;
 	for (int j = 0; j < LightingStepCount; j++) {
 		shadow += (samplecloudmap(cur_pos, time) * CloudDensity);
 		
