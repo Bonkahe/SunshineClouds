@@ -1,0 +1,21 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://cuhyottjxt7xb"]
+
+[ext_resource type="Shader" path="res://addons/SunshineVolumetricClouds/RayMarchedCloudsPost.gdshader" id="1_srqee"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_srqee")
+shader_parameter/StartingPointNoisePower = 19.499
+shader_parameter/ditherspeed = 1000.0
+shader_parameter/StepDepthBlendRange = 50.0
+shader_parameter/cloudSoftness = 0.253
+shader_parameter/CloudDensity = 3.97
+shader_parameter/DensityCutoff = 1.3
+shader_parameter/CloudMaxDistance = 12000.0
+shader_parameter/CloudMaxDistanceFalloff = 5000.0
+shader_parameter/CloudFogMaxDistance = 14000.0
+shader_parameter/StepDistanceClose = 5.0
+shader_parameter/StepDistanceFar = 50.0
+shader_parameter/StepCount = 300
+shader_parameter/LightingStepDistance = 10.0
+shader_parameter/LightingStepCount = 50

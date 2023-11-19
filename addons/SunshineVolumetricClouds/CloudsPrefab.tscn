@@ -1,0 +1,27 @@
+[gd_scene load_steps=8 format=3 uid="uid://byjn5yc1m1okl"]
+
+[ext_resource type="Script" path="res://addons/SunshineVolumetricClouds/CloudsController.cs" id="1_olrtl"]
+[ext_resource type="Texture2D" uid="uid://rjbn3mellhc1" path="res://addons/SunshineVolumetricClouds/HeightWeightGradient.tres" id="2_bwd87"]
+[ext_resource type="NoiseTexture3D" uid="uid://beujfcx2u0pqg" path="res://addons/SunshineVolumetricClouds/BaseNoiseTexture.tres" id="3_foyfo"]
+[ext_resource type="NoiseTexture3D" uid="uid://dt4lbhlv68dai" path="res://addons/SunshineVolumetricClouds/BaseNoiseDetailTexture.tres" id="4_q62vm"]
+[ext_resource type="NoiseTexture3D" uid="uid://duqxdvvkivpvw" path="res://addons/SunshineVolumetricClouds/BaseNoiseLargeScaleTexture.tres" id="5_u1sul"]
+[ext_resource type="Material" uid="uid://c8st2g4328leo" path="res://addons/SunshineVolumetricClouds/CloudsMatMediumQuality.tres" id="6_blx7e"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_5cyly"]
+flip_faces = true
+size = Vector2(2, 2)
+
+[node name="CloudsSystem" type="Node"]
+script = ExtResource("1_olrtl")
+GradientControlTexture = ExtResource("2_bwd87")
+BaseNoiseTexture = ExtResource("3_foyfo")
+DetailNoiseTexture = ExtResource("4_q62vm")
+LargeScaleNoiseTexture = ExtResource("5_u1sul")
+
+[node name="CloudQuad" type="MeshInstance3D" parent="."]
+cast_shadow = 0
+extra_cull_margin = 16384.0
+custom_aabb = AABB(0, 0, 0, 1e+08, 1e+08, 1e+07)
+ignore_occlusion_culling = true
+mesh = SubResource("QuadMesh_5cyly")
+surface_material_override/0 = ExtResource("6_blx7e")

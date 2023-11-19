@@ -1,0 +1,7 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://demmixc82qno4"]
+
+[ext_resource type="Shader" path="res://addons/SunshineVolumetricClouds/AltLightingRayMarchedCloudsPost.gdshader" id="1_iqgna"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_iqgna")

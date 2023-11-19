@@ -1,0 +1,95 @@
+[gd_scene load_steps=7 format=3 uid="uid://dqlh6bs8vof4i"]
+
+[ext_resource type="Environment" uid="uid://dgwki8y1f6sbc" path="res://addons/SunshineVolumetricClouds/ExampleWorldEnvironment.tres" id="1_6dkif"]
+[ext_resource type="Material" uid="uid://cgbvtmogjj0j7" path="res://addons/SunshineVolumetricClouds/WorldShadows/CloudsShadowMaterialTest.tres" id="2_ttao7"]
+[ext_resource type="PackedScene" uid="uid://b7qvroojpe8hu" path="res://addons/SunshineVolumetricClouds/TerrainTest.gltf" id="3_h7f1s"]
+[ext_resource type="PackedScene" uid="uid://byjn5yc1m1okl" path="res://addons/SunshineVolumetricClouds/CloudsPrefab.tscn" id="3_rcng6"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_3nrao"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_ym8im"]
+top_radius = 200.0
+bottom_radius = 200.0
+height = 2000.0
+
+[node name="Node3D" type="Node3D"]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.59258, 0.693607, -0.409583, 0.563188, 0.00678416, 0.826301, 0.575907, -0.720321, -0.386611, 0, 0, 0)
+light_color = Color(0.898039, 0.85098, 0.811765, 1)
+shadow_enabled = true
+directional_shadow_split_1 = 0.005
+directional_shadow_blend_splits = true
+directional_shadow_max_distance = 10000.0
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource("1_6dkif")
+
+[node name="Platform" type="CSGBox3D" parent="."]
+visible = false
+size = Vector3(30000, 1, 30000)
+material = ExtResource("2_ttao7")
+
+[node name="PlayerRef" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -33.3644, 0)
+mesh = SubResource("CapsuleMesh_3nrao")
+skeleton = NodePath("../OmniLight3D")
+surface_material_override/0 = ExtResource("2_ttao7")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.71287, -33.038, 1.16559)
+light_color = Color(0.270588, 0.313726, 0.490196, 1)
+light_energy = 6.875
+light_volumetric_fog_energy = 16.0
+shadow_enabled = true
+omni_range = 20.0
+
+[node name="Pillar" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1318.16, 770.702, -551.57)
+mesh = SubResource("CylinderMesh_ym8im")
+surface_material_override/0 = ExtResource("2_ttao7")
+
+[node name="Pillar2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1318.16, 770.702, -2340.57)
+mesh = SubResource("CylinderMesh_ym8im")
+surface_material_override/0 = ExtResource("2_ttao7")
+
+[node name="Pillar3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1318.16, 770.702, -4404.57)
+mesh = SubResource("CylinderMesh_ym8im")
+surface_material_override/0 = ExtResource("2_ttao7")
+
+[node name="Pillar4" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1318.16, 770.702, -6393.57)
+mesh = SubResource("CylinderMesh_ym8im")
+surface_material_override/0 = ExtResource("2_ttao7")
+
+[node name="Pillar5" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1318.16, 770.702, -8411.57)
+mesh = SubResource("CylinderMesh_ym8im")
+surface_material_override/0 = ExtResource("2_ttao7")
+
+[node name="Pillar6" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1318.16, 770.702, -10475.6)
+mesh = SubResource("CylinderMesh_ym8im")
+surface_material_override/0 = ExtResource("2_ttao7")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(0.891007, 0.147805, 0.429256, 0, 0.945519, -0.325568, -0.453991, 0.290083, 0.842463, 4.517, 1.323, 9.946)
+fov = 90.0
+far = 15000.0
+
+[node name="TerrainTest" parent="." instance=ExtResource("3_h7f1s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -100, 0)
+
+[node name="StarGrid_128" parent="TerrainTest" index="0"]
+surface_material_override/0 = ExtResource("2_ttao7")
+
+[node name="CloudsSystem" parent="." node_paths=PackedStringArray("SunLight") instance=ExtResource("3_rcng6")]
+SunLight = NodePath("../DirectionalLight3D")
+CloudsCutoff = 0.153
+SunColorDefault = Color(0.898039, 0.85098, 0.811765, 1)
+AmbientColorDefault = Color(0.368627, 0.458824, 0.54902, 1)
+FogColorDefault = Color(0.34902, 0.419608, 0.490196, 1)
+
+[editable path="TerrainTest"]
