@@ -26,8 +26,8 @@ global uniform vec4 SunshineClouds_AmbientColor;
 global uniform sampler3D SunshineClouds_BaseNoiseTexture;
 global uniform sampler3D SunshineClouds_DetailNoiseTexture;
 global uniform sampler3D SunshineClouds_LargeScaleNoiseTexture;
-
 global uniform sampler2D SunshineClouds_HeightWeightGradient;
+
 
 group_uniforms SmoothingControls;
 // Offsets the origin depth by a dither matrix multiplied by this and the step distance, prevents banding.

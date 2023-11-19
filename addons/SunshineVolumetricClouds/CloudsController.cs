@@ -2,7 +2,6 @@ using Godot;
 using System;
 
 [Tool]
-[GlobalClass]
 public partial class CloudsController : Node
 {
     [Export] public bool UpdateConstantly { get; set; } = false;
@@ -16,7 +15,6 @@ public partial class CloudsController : Node
     [Export] public NoiseTexture3D LargeScaleNoiseTexture { get; set; }
 
     [ExportGroup("Weather Controls")]
-    
 
     [Export] public Vector2 WindDirection { get; set; } = new Vector2(1, 0);
     [Export] public float WindSpeed { get; set; } = 0.003f;

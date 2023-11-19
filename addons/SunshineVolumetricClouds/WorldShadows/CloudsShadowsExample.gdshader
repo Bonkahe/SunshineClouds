@@ -29,7 +29,7 @@ group_uniforms DensityControls;
 uniform float CloudDitherPower = 100.0;
 uniform float CloudDensity = 1.0;
 uniform float cloudSoftness = 0.215;
-uniform float CloudBlendRange = 500.0;
+//uniform float CloudBlendRange = 500.0;
 
 varying vec3 fragment_worldpos;
 const mat4 dither_matrix = mat4(
@@ -50,9 +50,9 @@ void fragment() {
 }
 
 float samplecloudmap(vec3 pos, float time) {
-	float heightSample =  smoothstep(SunshineClouds_CloudsFloor + CloudBlendRange, SunshineClouds_CloudsFloor, pos.y);
+	//float heightSample = smoothstep(SunshineClouds_CloudsCeiling,SunshineClouds_CloudsFloor, pos.y);
 	float heightScale = (pos.y - SunshineClouds_CloudsFloor) / (SunshineClouds_CloudsCeiling - SunshineClouds_CloudsFloor);
-	pos.y = max(SunshineClouds_CloudsFloor, pos.y);
+	//pos.y = clamp(pos.y, SunshineClouds_CloudsFloor, SunshineClouds_CloudsCeiling);
 	pos /= SunshineClouds_CloudsGlobalScale;
 	
 	float largeScaleNoise = textureLod(SunshineClouds_LargeScaleNoiseTexture, pos * (SunshineClouds_CloudsLargeScaleNoiseScale) + (vec3(SunshineClouds_WindDirection.x, 0.0, SunshineClouds_WindDirection.y) * time * SunshineClouds_WindSpeed / 4.0), 100.0).r * SunshineClouds_CloudsLargeScaleNoisePower;
@@ -68,7 +68,7 @@ float samplecloudmap(vec3 pos, float time) {
 	//noise = posCutoff;
 	noise = smoothstep(SunshineClouds_CloudsCutoff, SunshineClouds_CloudsCutoff + cloudSoftness, noise);
 	noise *= heightScale;
-	noise *= heightSample;
+	//noise *= heightSample;
 	//noise = clamp(noise, 0.0, posCutoff);
 	//noise -= posCutoff;f
 	//noise = clamp(noise, 0.0, abs(clamp(pos.y, CloudFloor, CloudCeiling) - pos.y));
@@ -82,15 +82,21 @@ void light()
 	if (LIGHT_IS_DIRECTIONAL){
 		const float CLOUD_SHADOW_STRENGTH = 0.5;
 		float cast_shadow = ATTENUATION;//clamp(ATTENUATION * 2.0 - 1.0, 0, 1.5);
-		float upDot = (dot(SunshineClouds_SunDirection, vec3(0.0, 1.0, 0.0)) + 1.0) / 2.0;
+		//float upDot = (dot(SunshineClouds_SunDirection, vec3(0.0, 1.0, 0.0)) + 1.0) / 2.0;
 		
 		float dither = dither_matrix[int(FRAGCOORD.x + TIME * 100.0) % 4][int(FRAGCOORD.y + TIME  * 100.0) % 4];
 		
 		dither = (dither * CloudDitherPower) - CloudDitherPower / 2.0;
 		vec3 origin = fragment_worldpos;
+		float angleUpward = clamp(2.0 - ((dot(SunshineClouds_SunDirection, vec3(0.0, 1.0, 0.0)) + 1.0)) * 180.0, 0.0, 180.0);
 		origin += SunshineClouds_SunDirection * dither;
 		
-		float cloud_shadow = (1.0 - clamp(samplecloudmap(origin + SunshineClouds_SunDirection * mix(SunshineClouds_CloudsFloor * 30.0, SunshineClouds_CloudsFloor * 3.0, upDot), TIME) * CloudDensity, 0.0, 1.0));
+		float lengthToTravel = (SunshineClouds_CloudsFloor + 200.0) - origin.y / sin(90.0 - angleUpward);
+		
+		//origin += SunshineClouds_SunDirection * dither;
+		origin += SunshineClouds_SunDirection * lengthToTravel;
+		origin.y = clamp(origin.y, SunshineClouds_CloudsFloor + 200.0, SunshineClouds_CloudsCeiling);
+		float cloud_shadow = (1.0 - clamp(samplecloudmap(origin, TIME) * CloudDensity, 0.0, 1.0));
 		float shadow = cast_shadow * (clamp(cloud_shadow * 3.0 - 1.0, 0.0, 1.0) * CLOUD_SHADOW_STRENGTH);
 		DIFFUSE_LIGHT +=  clamp(dot(NORMAL, LIGHT), 0.0, 1.0) * shadow * LIGHT_COLOR;
 	}

@@ -9,4 +9,3 @@ shader_parameter/ObjectColor = Color(0.4, 0.376471, 0.345098, 1)
 shader_parameter/CloudDitherPower = 30.0
 shader_parameter/CloudDensity = 1.0
 shader_parameter/cloudSoftness = 0.215
-shader_parameter/CloudBlendRange = 2000.0
