@@ -6,6 +6,6 @@
 render_priority = 0
 shader = ExtResource("1_xwm4s")
 shader_parameter/ObjectColor = Color(0.4, 0.376471, 0.345098, 1)
-shader_parameter/CloudDitherPower = 30.0
+shader_parameter/CloudDitherPower = 1000.0
 shader_parameter/CloudDensity = 1.0
 shader_parameter/cloudSoftness = 0.215

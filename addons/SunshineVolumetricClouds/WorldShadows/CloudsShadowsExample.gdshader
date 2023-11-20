@@ -55,14 +55,14 @@ float samplecloudmap(vec3 pos, float time) {
 	//pos.y = clamp(pos.y, SunshineClouds_CloudsFloor, SunshineClouds_CloudsCeiling);
 	pos /= SunshineClouds_CloudsGlobalScale;
 	
-	float largeScaleNoise = textureLod(SunshineClouds_LargeScaleNoiseTexture, pos * (SunshineClouds_CloudsLargeScaleNoiseScale) + (vec3(SunshineClouds_WindDirection.x, 0.0, SunshineClouds_WindDirection.y) * time * SunshineClouds_WindSpeed / 4.0), 100.0).r * SunshineClouds_CloudsLargeScaleNoisePower;
+	float largeScaleNoise = textureLod(SunshineClouds_LargeScaleNoiseTexture, pos * (SunshineClouds_CloudsLargeScaleNoiseScale) + (vec3(SunshineClouds_WindDirection.x, 0.0, SunshineClouds_WindDirection.y) * time * SunshineClouds_WindSpeed / 4.0), 1.0).r * SunshineClouds_CloudsLargeScaleNoisePower;
 	//float largeScaleNoise = texture(LargeShapeNoiseTexture, vec3(pos.x, pos.y * 0.5, pos.z) * (large_scale_noise_scale) + vec3(WindDirection.x, 0.0, WindDirection.y) * time * WindSpeed / 3.0).r * large_scale_noise_power;
 	
 	//if (largeScaleNoise > 1.0){return 0.0;}
 	heightScale = texture(SunshineClouds_HeightWeightGradient, vec2(heightScale, 0.0)).r;
 	
-	float noise = textureLod(SunshineClouds_BaseNoiseTexture, pos * (SunshineClouds_CloudsBaseNoiseScale) + vec3(SunshineClouds_WindDirection.x, 0.0, SunshineClouds_WindDirection.y) * time * SunshineClouds_WindSpeed, 100.0).r 
-	+ textureLod(SunshineClouds_DetailNoiseTexture, pos * (SunshineClouds_CloudsDetailNoiseScale) - (vec3(SunshineClouds_WindDirection.x, 0.0, SunshineClouds_WindDirection.y) * time * SunshineClouds_WindSpeed / 3.0), 10.0).r * SunshineClouds_CloudsDetailNoisePower;
+	float noise = textureLod(SunshineClouds_BaseNoiseTexture, pos * (SunshineClouds_CloudsBaseNoiseScale) + vec3(SunshineClouds_WindDirection.x, 0.0, SunshineClouds_WindDirection.y) * time * SunshineClouds_WindSpeed, 1.0).r 
+	+ textureLod(SunshineClouds_DetailNoiseTexture, pos * (SunshineClouds_CloudsDetailNoiseScale) - (vec3(SunshineClouds_WindDirection.x, 0.0, SunshineClouds_WindDirection.y) * time * SunshineClouds_WindSpeed / 3.0), 1.0).r * SunshineClouds_CloudsDetailNoisePower;
 	
 	noise -= largeScaleNoise;
 	//noise = posCutoff;
@@ -84,7 +84,7 @@ void light()
 		float cast_shadow = ATTENUATION;//clamp(ATTENUATION * 2.0 - 1.0, 0, 1.5);
 		//float upDot = (dot(SunshineClouds_SunDirection, vec3(0.0, 1.0, 0.0)) + 1.0) / 2.0;
 		
-		float dither = dither_matrix[int(FRAGCOORD.x + TIME * 100.0) % 4][int(FRAGCOORD.y + TIME  * 100.0) % 4];
+		float dither = dither_matrix[int(FRAGCOORD.x + TIME * 100.0) % 4][int(FRAGCOORD.y + TIME * 100.0) % 4];
 		
 		dither = (dither * CloudDitherPower) - CloudDitherPower / 2.0;
 		vec3 origin = fragment_worldpos;
