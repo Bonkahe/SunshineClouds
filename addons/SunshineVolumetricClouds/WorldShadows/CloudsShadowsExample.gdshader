@@ -50,7 +50,7 @@ void fragment() {
 }
 
 float samplecloudmap(vec3 pos, float time) {
-	//float heightSample = smoothstep(SunshineClouds_CloudsCeiling,SunshineClouds_CloudsFloor, pos.y);
+	float heightSample = smoothstep(SunshineClouds_CloudsCeiling,SunshineClouds_CloudsCeiling - 100.0, pos.y);
 	float heightScale = (pos.y - SunshineClouds_CloudsFloor) / (SunshineClouds_CloudsCeiling - SunshineClouds_CloudsFloor);
 	//pos.y = clamp(pos.y, SunshineClouds_CloudsFloor, SunshineClouds_CloudsCeiling);
 	pos /= SunshineClouds_CloudsGlobalScale;
@@ -68,7 +68,7 @@ float samplecloudmap(vec3 pos, float time) {
 	//noise = posCutoff;
 	noise = smoothstep(SunshineClouds_CloudsCutoff, SunshineClouds_CloudsCutoff + cloudSoftness, noise);
 	noise *= heightScale;
-	//noise *= heightSample;
+	noise *= heightSample;
 	//noise = clamp(noise, 0.0, posCutoff);
 	//noise -= posCutoff;f
 	//noise = clamp(noise, 0.0, abs(clamp(pos.y, CloudFloor, CloudCeiling) - pos.y));
@@ -91,11 +91,17 @@ void light()
 		float angleUpward = clamp(2.0 - ((dot(SunshineClouds_SunDirection, vec3(0.0, 1.0, 0.0)) + 1.0)) * 180.0, 0.0, 180.0);
 		origin += SunshineClouds_SunDirection * dither;
 		
-		float lengthToTravel = (SunshineClouds_CloudsFloor + 200.0) - origin.y / sin(90.0 - angleUpward);
-		
-		//origin += SunshineClouds_SunDirection * dither;
-		origin += SunshineClouds_SunDirection * lengthToTravel;
-		origin.y = clamp(origin.y, SunshineClouds_CloudsFloor + 200.0, SunshineClouds_CloudsCeiling);
+		if (origin.y < SunshineClouds_CloudsFloor){
+			float lengthToTravel = (SunshineClouds_CloudsFloor + 200.0) - origin.y / sin(90.0 - angleUpward);
+			
+			//origin += SunshineClouds_SunDirection * dither;
+			origin += SunshineClouds_SunDirection * lengthToTravel;
+		}
+		else
+		{
+			origin += SunshineClouds_SunDirection * 200.0;
+		}
+		//origin.y = max(origin.y, SunshineClouds_CloudsFloor + 200.0);
 		float cloud_shadow = (1.0 - clamp(samplecloudmap(origin, TIME) * CloudDensity, 0.0, 1.0));
 		float shadow = cast_shadow * (clamp(cloud_shadow * 3.0 - 1.0, 0.0, 1.0) * CLOUD_SHADOW_STRENGTH);
 		DIFFUSE_LIGHT +=  clamp(dot(NORMAL, LIGHT), 0.0, 1.0) * shadow * LIGHT_COLOR;
