@@ -1,4 +1,5 @@
 @tool
+@icon("res://addons/SunshineVolumetricClouds/SunshineIcon.svg")
 extends Node
 class_name CloudsController;
 

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="300mm"
+   height="300mm"
+   viewBox="0 0 300 300"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.3.1 (91b66b0783, 2023-11-16)"
+   sodipodi:docname="SunshineIcon.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="true"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="0.75318056"
+     inkscape:cx="565.60143"
+     inkscape:cy="672.48151"
+     inkscape:window-width="1920"
+     inkscape:window-height="1027"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg1" />
+  <defs
+     id="defs1" />
+  <path
+     id="path1"
+     style="fill:#000000;fill-opacity:0;stroke:#e6e6e6;stroke-width:43.7224;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1"
+     d="m 121.55519,111.24159 c -38.291343,0.0825 -70.189192,26.14647 -73.545396,60.09443 -8.164948,9.78205 -12.566674,21.42189 -12.615199,33.35938 0.02636,13.7555 5.83123,27.06404 16.396485,37.59137 -14.911911,5.81814 -23.543492,14.41878 -23.575736,23.49125 0.04028,0.41783 0.09885,0.83523 0.175686,1.25194 l 2.585811,0.71876 c 0,0 67.933626,4.50386 96.101349,4.50386 10.91665,0 21.29248,-0.21142 31.19181,-0.51689 10.60162,-0.31518 24.70324,-0.77798 40.60866,-2.2979 12.38636,-1.18364 28.42786,-5.86476 37.16523,-8.61784 6.66977,-7.71292 10.28662,-17.01197 10.33365,-26.56816 -0.007,-24.56266 -23.14467,-44.64956 -52.17134,-45.29266 0.85396,-3.90517 1.30861,-7.8712 1.35839,-11.8494 1.6e-4,-36.3779 -33.13502,-65.86811 -74.0094,-65.86814 z"
+     inkscape:label="Clouds"
+     sodipodi:nodetypes="cccccccscsccccc" />
+  <path
+     id="path4"
+     style="fill:#ff6600;fill-opacity:0;stroke:#fc7f7f;stroke-width:43.7224;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1"
+     d="m 249.77186,156.74564 c 15.75279,-11.78992 20.75283,-29.06535 20.81556,-48.74144 3e-5,-34.609157 -28.05623,-62.665422 -62.66538,-62.665397 -21.68082,0.02668 -39.65729,7.879311 -51.06396,26.316957"
+     sodipodi:nodetypes="cccc" />
+</svg>
