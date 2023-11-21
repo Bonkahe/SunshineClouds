@@ -14,7 +14,7 @@ height = 2000.0
 [node name="Node3D" type="Node3D"]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.831108, -0.498451, 0.246589, 0.273209, 0.0202407, 0.961742, -0.484372, 0.866682, 0.119359, 0, 9.91598, 0)
+transform = Transform3D(-0.667196, -0.498451, -0.553531, -0.647287, 0.0202407, 0.761977, -0.368604, 0.866682, -0.336145, 0, 9.91598, 0)
 light_color = Color(0.964706, 0.94902, 0.933333, 1)
 shadow_enabled = true
 directional_shadow_split_1 = 0.005
@@ -81,7 +81,8 @@ far = 15000.0
 updateConstantly = true
 sunLight = NodePath("../DirectionalLight3D")
 worldEnvironment = NodePath("../WorldEnvironment")
+windSpeed = 0.01
 sunColorDefault = Color(0.964706, 0.94902, 0.933333, 1)
 overrideAmbientLight = true
 ambientColorDefault = Color(0.0470588, 0.0745098, 0.0941176, 1)
-fogColorDefault = Color(0.619608, 0.690196, 0.760784, 1)
+fogColorDefault = Color(0.815686, 0.843137, 0.866667, 1)

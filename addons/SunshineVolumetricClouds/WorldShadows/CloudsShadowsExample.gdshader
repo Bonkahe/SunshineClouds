@@ -29,7 +29,7 @@ group_uniforms DensityControls;
 uniform float CloudDitherPower = 200.0;
 uniform float CloudCutoffAdjust = -0.795;
 uniform float CloudDensity = 1.49;
-uniform float CloudOpacity: hint_range(0,1) = 0.90;
+uniform float CloudOpacity: hint_range(0,1) = 1.0;
 uniform float cloudSoftness = 0.85;
 
 varying vec3 fragment_worldpos;

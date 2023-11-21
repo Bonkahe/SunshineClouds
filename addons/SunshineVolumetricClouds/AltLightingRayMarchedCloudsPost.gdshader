@@ -32,7 +32,7 @@ global uniform sampler2D SunshineClouds_HeightWeightGradient;
 group_uniforms SmoothingControls;
 // Offsets the origin depth by a dither matrix multiplied by this and the step distance, prevents banding.
 uniform float StartingPointNoisePower: hint_range(0,40) = 15;
-uniform float ditherspeed: hint_range(0,1000) = 1000.0;
+uniform float ditherspeed: hint_range(0,1000) = 100.0;
 uniform float StepDepthBlendRange = 50.0;
 
 group_uniforms DensityControls;
