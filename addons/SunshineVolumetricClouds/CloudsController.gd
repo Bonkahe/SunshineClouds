@@ -34,6 +34,48 @@ class_name CloudsController;
 @export var useFogDefault : bool = true;
 @export var fogColorDefault : Color = Color(1, 1, 1);
 
+func _ready():
+	if (!Engine.is_editor_hint()):
+		AddShaderVariables();
+		UpdateGlobalVariableTextures();
+		UpdateGlobalVariables();
+
+func AddShaderVariables():
+	var HeightWeightGradient = ResourceLoader.load("res://addons/SunshineVolumetricClouds/HeightWeightGradient.tres");
+	RenderingServer.global_shader_parameter_add("SunshineClouds_HeightWeightGradient", RenderingServer.GLOBAL_VAR_TYPE_SAMPLER2D, HeightWeightGradient);
+
+	var BaseNoiseTexture = ResourceLoader.load("res://addons/SunshineVolumetricClouds/BaseNoiseTexture.tres");
+
+	RenderingServer.global_shader_parameter_add("SunshineClouds_BaseNoiseTexture", RenderingServer.GLOBAL_VAR_TYPE_SAMPLER3D, BaseNoiseTexture);
+
+	var DetailNoiseTexture = ResourceLoader.load("res://addons/SunshineVolumetricClouds/BaseNoiseDetailTexture.tres");
+
+	RenderingServer.global_shader_parameter_add("SunshineClouds_DetailNoiseTexture", RenderingServer.GLOBAL_VAR_TYPE_SAMPLER3D, DetailNoiseTexture);
+
+	var LargeScaleNoiseTexture = ResourceLoader.load("res://addons/SunshineVolumetricClouds/BaseNoiseLargeScaleTexture.tres");
+
+	RenderingServer.global_shader_parameter_add("SunshineClouds_LargeScaleNoiseTexture", RenderingServer.GLOBAL_VAR_TYPE_SAMPLER3D, LargeScaleNoiseTexture);
+
+	RenderingServer.global_shader_parameter_add("SunshineClouds_SunDirection", RenderingServer.GLOBAL_VAR_TYPE_VEC3, Vector3.UP);
+	RenderingServer.global_shader_parameter_add("SunshineClouds_SunColor", RenderingServer.GLOBAL_VAR_TYPE_COLOR, Color(1, 1, 1));
+	RenderingServer.global_shader_parameter_add("SunshineClouds_FogColor", RenderingServer.GLOBAL_VAR_TYPE_COLOR, Color(1, 1, 1));
+	RenderingServer.global_shader_parameter_add("SunshineClouds_AmbientColor", RenderingServer.GLOBAL_VAR_TYPE_COLOR, Color(0, 0, 0));
+
+	RenderingServer.global_shader_parameter_add("SunshineClouds_UseFog", RenderingServer.GLOBAL_VAR_TYPE_BOOL, true);
+
+	RenderingServer.global_shader_parameter_add("SunshineClouds_WindDirection", RenderingServer.GLOBAL_VAR_TYPE_VEC2, Vector2.ZERO);
+	RenderingServer.global_shader_parameter_add("SunshineClouds_WindSpeed", RenderingServer.GLOBAL_VAR_TYPE_FLOAT, 0.003);
+	RenderingServer.global_shader_parameter_add("SunshineClouds_CloudsGlobalScale", RenderingServer.GLOBAL_VAR_TYPE_FLOAT, 10000.0);
+	RenderingServer.global_shader_parameter_add("SunshineClouds_CloudsDetailNoiseScale", RenderingServer.GLOBAL_VAR_TYPE_FLOAT, 5.921);
+	RenderingServer.global_shader_parameter_add("SunshineClouds_CloudsDetailNoisePower", RenderingServer.GLOBAL_VAR_TYPE_FLOAT, 1.048);
+	RenderingServer.global_shader_parameter_add("SunshineClouds_CloudsLargeScaleNoiseScale", RenderingServer.GLOBAL_VAR_TYPE_FLOAT, 0.216);
+	RenderingServer.global_shader_parameter_add("SunshineClouds_CloudsLargeScaleNoisePower", RenderingServer.GLOBAL_VAR_TYPE_FLOAT, 3.435);
+	RenderingServer.global_shader_parameter_add("SunshineClouds_CloudsBaseNoiseScale", RenderingServer.GLOBAL_VAR_TYPE_FLOAT, 1.761);
+	RenderingServer.global_shader_parameter_add("SunshineClouds_CloudsCutoff", RenderingServer.GLOBAL_VAR_TYPE_FLOAT, 0.213);
+
+	RenderingServer.global_shader_parameter_add("SunshineClouds_CloudsFloor", RenderingServer.GLOBAL_VAR_TYPE_FLOAT, 80.0);
+	RenderingServer.global_shader_parameter_add("SunshineClouds_CloudsCeiling", RenderingServer.GLOBAL_VAR_TYPE_FLOAT, 2000.0);
+
 func _process(delta):
 	if (Engine.is_editor_hint() || updateConstantly):
 		UpdateGlobalVariableTextures();

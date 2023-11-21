@@ -9,6 +9,6 @@ domain_warp_type = 1
 
 [resource]
 seamless = true
-seamless_blend_skirt = 0.2
+seamless_blend_skirt = 0.4
 normalize = false
 noise = SubResource("FastNoiseLite_7o76k")

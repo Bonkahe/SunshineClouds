@@ -26,10 +26,11 @@ global uniform sampler3D SunshineClouds_LargeScaleNoiseTexture;
 global uniform sampler2D SunshineClouds_HeightWeightGradient;
 
 group_uniforms DensityControls;
-uniform float CloudDitherPower = 100.0;
-uniform float CloudDensity = 1.0;
-uniform float cloudSoftness = 0.215;
-//uniform float CloudBlendRange = 500.0;
+uniform float CloudDitherPower = 200.0;
+uniform float CloudCutoffAdjust = -0.795;
+uniform float CloudDensity = 1.49;
+uniform float CloudOpacity: hint_range(0,1) = 0.90;
+uniform float cloudSoftness = 0.85;
 
 varying vec3 fragment_worldpos;
 const mat4 dither_matrix = mat4(
@@ -66,9 +67,10 @@ float samplecloudmap(vec3 pos, float time) {
 	
 	noise -= largeScaleNoise;
 	//noise = posCutoff;
-	noise = smoothstep(SunshineClouds_CloudsCutoff, SunshineClouds_CloudsCutoff + cloudSoftness, noise);
+	noise = smoothstep(SunshineClouds_CloudsCutoff + CloudCutoffAdjust, SunshineClouds_CloudsCutoff + cloudSoftness, noise);
 	noise *= heightScale;
 	noise *= heightSample;
+	
 	//noise = clamp(noise, 0.0, posCutoff);
 	//noise -= posCutoff;f
 	//noise = clamp(noise, 0.0, abs(clamp(pos.y, CloudFloor, CloudCeiling) - pos.y));
@@ -103,7 +105,7 @@ void light()
 		}
 		//origin.y = max(origin.y, SunshineClouds_CloudsFloor + 200.0);
 		float cloud_shadow = (1.0 - clamp(samplecloudmap(origin, TIME) * CloudDensity, 0.0, 1.0));
-		float shadow = cast_shadow * (clamp(cloud_shadow * 3.0 - 1.0, 0.0, 1.0) * CLOUD_SHADOW_STRENGTH);
+		float shadow = mix(ATTENUATION, cast_shadow * (clamp(cloud_shadow * 3.0 - 1.0, 0.0, 1.0) * CLOUD_SHADOW_STRENGTH), CloudOpacity);
 		DIFFUSE_LIGHT +=  clamp(dot(NORMAL, LIGHT), 0.0, 1.0) * shadow * LIGHT_COLOR;
 	}
 	else{

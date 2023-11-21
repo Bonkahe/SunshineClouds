@@ -10,6 +10,6 @@ fractal_lacunarity = 3.26
 [resource]
 invert = true
 seamless = true
-seamless_blend_skirt = 0.2
+seamless_blend_skirt = 0.4
 color_ramp = SubResource("Gradient_3k2ch")
 noise = SubResource("FastNoiseLite_ostar")
