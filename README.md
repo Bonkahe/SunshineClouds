@@ -2,6 +2,7 @@
 
 # SunshineClouds
 This project is currently work in progress, but should be usable in game.
+Currently working on getting it on the Asset Library.
 
 A procedural cloud system for Godot 4.2 designed from the ground up to be as extendable, and barebones as possible while still looking as good as possible.
 
@@ -13,19 +14,20 @@ A procedural cloud system for Godot 4.2 designed from the ground up to be as ext
 
 ## Installation
 1. Download Repo (zip works just fine)
-2. Pull ["SunShineClouds"](https://github.com/Bonkahe/SunshineClouds/tree/main/SunShineClouds) folder into your project in a out of the way location.
+2. Activate Plugin (Project->Project Settings->Plugins->SunshineClouds)
+2. Pull addons folder into your project.
 
 ### Installation Cont. Option A:
-1. Add ["CloudsPrefab.tscn"](https://github.com/Bonkahe/SunshineClouds/blob/main/SunShineClouds/CloudsPrefab.tscn) to your scene, works out of the gate, but will need to be plugged into your directional light and enviroment.
+1. Add ["CloudsPrefab.tscn"](https://github.com/Bonkahe/SunshineClouds/blob/main/addons/SunshineVolumetricClouds/CloudsPrefab.tscn) to your scene, works out of the gate, but will need to be plugged into your directional light and enviroment, also the quad will not automatically follow your camera, so if you get too far out of the origin point the clouds may disapear.
 
 ### Installation Cont. Option B:
 1. Add MeshInstance3D to your scene.
-2. Set new MeshInstance3D mesh to a quad mesh.
-3. Set new MeshInstance3D material to one of the quality settings in the SunShineClouds (Default, Low, High)
-4. Right click your scene node and add a new child Node of type "CloudsController"
-5. Set CloudsController Sun Light to your scene Directional Light
-6. Set CloudsController Sky Material to your selected material (the one you put into the MeshInstance3D)
-7. Optionally: Add your environment resource to the OptionalWorldEnvironment variable in the CloudsController.
+2. Child the new MeshInstance3D to your camera, to ensure it does not get culled.
+3. Set new MeshInstance3D mesh to a quad mesh.
+4. Set new MeshInstance3D material to one of the quality settings in the SunShineClouds (Default, Low, High)
+5. Right click your scene node and add a new child Node of type "CloudsController"
+6. Set CloudsController SunLight to your scene Directional Light
+7. Add your environment to the WorldEnvironment variable in the CloudsController.
 
 ## Contribution
 A couple important things to make note of here, this project is meant to as much as possible be a very bare bones system, I want it to be extended in peoples projects, to make it as multi-purpose as possible.
@@ -34,6 +36,7 @@ implemented in as many projects as easily as possible.
 That being said if you do anything in these regards by all means make a new repo and send me a message, I will make an addons section in this readme with a link to your project.
 
 ### Current outstanding issues
+* Get up and running on asset library.
 * Slight depth error at edges of camera, more noticable at further distance, need to apply fisheye effect to depth to counteract this.
 * Continued Performance improvements and general stability
 
