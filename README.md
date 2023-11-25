@@ -13,14 +13,16 @@ A procedural cloud system for Godot 4.2 designed from the ground up to be as ext
 * Very barebones and simple script to set the material variables to the world (updates sun rotation, environment settings, fog etc.)
 
 ## Installation
-1. Download Repo (zip works just fine)
-2. Activate Plugin (Project->Project Settings->Plugins->SunshineClouds)
-2. Pull addons folder into your project.
 
-### Installation Cont. Option A:
+1. Option A: Download Repo (zip works just fine)
+1. Option B: Download either online or via the in-editor asset library at this location: [https://godotengine.org/asset-library/asset/2372](https://godotengine.org/asset-library/asset/2372)
+2. Activate Plugin (Project->Project Settings->Plugins->SunshineClouds)
+3. Pull addons folder into your project.
+
+#### Installation Cont. Option A:
 1. Add ["CloudsPrefab.tscn"](https://github.com/Bonkahe/SunshineClouds/blob/main/addons/SunshineVolumetricClouds/CloudsPrefab.tscn) to your scene, works out of the gate, but will need to be plugged into your directional light and enviroment, also the quad will not automatically follow your camera, so if you get too far out of the origin point the clouds may disapear.
 
-### Installation Cont. Option B:
+#### Installation Cont. Option B:
 1. Add MeshInstance3D to your scene.
 2. Child the new MeshInstance3D to your camera, to ensure it does not get culled.
 3. Set new MeshInstance3D mesh to a quad mesh.
