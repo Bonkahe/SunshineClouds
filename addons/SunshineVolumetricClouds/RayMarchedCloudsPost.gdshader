@@ -158,11 +158,31 @@ void fragment() {
 	
 	if (cur_pos.y < SunshineClouds_CloudsFloor && view_dir.y < 0.0 || cur_pos.y > SunshineClouds_CloudsCeiling && view_dir.y > 0.0){discard;}
 	
+	const float hit_step_mult = 0.125;
+	const float near_step_mult = 0.5;
+	bool has_hit = false;
+	float next_step_mult = 1.0;
+	
 	for (int i = 0; i < StepCount; i++) {
-		cur_distance += mix(StepDistanceClose, StepDistanceFar, ease_out_quad(0.0,1.0,float(i) / float(StepCount)));
+		float step_dist = mix(StepDistanceClose, StepDistanceFar, ease_out_quad(0.0,1.0,float(i) / float(StepCount)));
+		step_dist *= has_hit ? hit_step_mult : 1.0;
+		step_dist *= next_step_mult;
+		next_step_mult = 1.0;
+		cur_distance += step_dist;
 		cur_pos = origin + view_dir * cur_distance;
 		
 		thisDensity = samplecloudmap(cur_pos, time)  * CloudDensity;
+		
+		if (thisDensity > DensityCutoff) {
+			if (!has_hit) {
+				has_hit = true;
+				cur_distance -= step_dist * (1.0 - hit_step_mult);
+				continue;
+			}
+		} else if (thisDensity > 0.0) {
+			next_step_mult = near_step_mult;
+		}
+		
 		currentColor = mix(currentColor, SunshineClouds_SunColor.rgb, thisDensity);
 		currentDensity += thisDensity * smoothstep(linear_depth, linear_depth - StepDepthBlendRange, cur_distance);
 		//cutoffvalue = CheckOutOfBounds(cur_pos, view_dir);
