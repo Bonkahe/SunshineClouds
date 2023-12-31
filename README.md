@@ -1,6 +1,10 @@
 <img src="https://github.com/Bonkahe/SunshineClouds/blob/main/GithubStuff/ProcCloudsGithubLogo.png">
 
 # SunshineClouds
+
+Project breakdown and usage explanation:
+[https://www.youtube.com/watch?v=8GCqIHHNDrg](https://www.youtube.com/watch?v=8GCqIHHNDrg)
+
 This project is currently work in progress, but should be usable in game.
 Currently working on getting it on the Asset Library.
 
