@@ -3,7 +3,7 @@ shader_type spatial;
 uniform vec3 ObjectColor: source_color = vec3(0.494, 0.573, 0.655);
 
 
-global uniform vec3 SunshineClouds_SunDirection;
+//global uniform vec3 SunshineClouds_SunDirection;
 global uniform vec2 SunshineClouds_WindDirection;
 global uniform float SunshineClouds_WindSpeed;
 
@@ -18,7 +18,7 @@ global uniform float SunshineClouds_CloudsFloor;
 global uniform float SunshineClouds_CloudsCeiling;
 global uniform float SunshineClouds_CloudsCutoff;
 
-
+global uniform vec3 SunshineClouds_SunDirection;
 global uniform sampler3D SunshineClouds_BaseNoiseTexture;
 global uniform sampler3D SunshineClouds_DetailNoiseTexture;
 global uniform sampler3D SunshineClouds_LargeScaleNoiseTexture;

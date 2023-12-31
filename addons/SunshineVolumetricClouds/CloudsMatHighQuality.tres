@@ -5,8 +5,8 @@
 [resource]
 render_priority = 0
 shader = ExtResource("1_srqee")
-shader_parameter/StartingPointNoisePower = 19.499
-shader_parameter/ditherspeed = 1000.0
+shader_parameter/StartingPointNoisePower = 10.0
+shader_parameter/ditherspeed = 100.0
 shader_parameter/StepDepthBlendRange = 50.0
 shader_parameter/cloudSoftness = 0.253
 shader_parameter/CloudDensity = 1.06

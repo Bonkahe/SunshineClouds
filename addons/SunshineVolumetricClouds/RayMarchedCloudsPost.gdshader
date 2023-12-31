@@ -31,7 +31,7 @@ global uniform sampler2D SunshineClouds_HeightWeightGradient;
 
 group_uniforms SmoothingControls;
 // Offsets the origin depth by a dither matrix multiplied by this and the step distance, prevents banding.
-uniform float StartingPointNoisePower: hint_range(0,40) = 5;
+uniform float StartingPointNoisePower: hint_range(0,40) = 10;
 uniform float ditherspeed: hint_range(0,1000) = 100.0;
 uniform float StepDepthBlendRange = 100.0;
 
@@ -41,21 +41,21 @@ uniform float cloudSoftness: hint_range(0,1) = 0.215;
 // basic controls for density and cutoff, cloud density may impact fake shadows later on.
 uniform float CloudDensity = 2.035;
 uniform float DensityCutoff = 1.3;
-uniform float CloudMaxDistance = 12000;
-uniform float CloudMaxDistanceFalloff = 5000;
+uniform float CloudMaxDistance = 10000;
+uniform float CloudMaxDistanceFalloff = 2000;
 
 
 group_uniforms FogControls;
 // Driven mostly by clouds controller script, but can be left on manual for specific look.
-uniform float CloudFogMaxDistance = 14000;
+uniform float CloudFogMaxDistance = 10000;
 
 
 
 group_uniforms QualityControls;
 //Blends between step distance close and step distance far to create higher detail closer and longer range clouds functionality.
 uniform float StepDistanceClose = 20.0;
-uniform float StepDistanceFar = 150.0;
-uniform int StepCount = 100;
+uniform float StepDistanceFar = 100.0;
+uniform int StepCount = 150;
 // be aware as you step up the lighting cloud count, you will need to step down the distance, as the total shadows and divided by the step count.
 uniform float LightingStepDistance = 20.0;
 uniform int LightingStepCount = 25;
@@ -125,11 +125,14 @@ float CheckOutOfBounds(vec3 position, vec3 vector){
 }
 
 void fragment() {
-	float depth = texture(depth_texture, SCREEN_UV).x;
+	float depth = textureLod(depth_texture,SCREEN_UV,0.0).r;
 	vec3 ndc = vec3(SCREEN_UV * 2.0 - 1.0, depth);
-	vec4 view = INV_PROJECTION_MATRIX * vec4(ndc, 1.0);
+	vec4 view = INV_PROJECTION_MATRIX * vec4(SCREEN_UV*2.0-1.0,depth,1.0);
 	view.xyz /= view.w;
-	float linear_depth = -view.z;
+	float linear_depth = length(view);
+	//if (linear_depth > 5900.0){
+		//linear_depth = 30000.0;
+	//}
 	
 	vec3 world = (CAMERA * vec4(VERTEX, 1.0)).xyz;
 	//// Get the camera position
