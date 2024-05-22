@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode skip_vertex_transform, cull_disabled;
+render_mode cull_disabled;
 render_mode unshaded;
 
 global uniform vec3 SunshineClouds_SunDirection;
@@ -65,7 +65,6 @@ group_uniforms Textures;
 uniform sampler2D depth_texture : source_color, hint_depth_texture;
 // used to create a ramp than controls the vertical axis on the clouds, lets you author clouds a little more detailed, to blend between different types lerp this using c# or gdscript to another gradient.
 
-varying mat4 CAMERA;
 const mat4 dither_matrix = mat4(
   vec4(0.0625, 0.5625, 0.1875,  0.6875),
   vec4(0.8125, 0.3125, 0.9375,  0.4375),
@@ -76,8 +75,7 @@ const mat4 dither_matrix = mat4(
 void vertex() {
 	//time = TIME;
 	//POSITION = vec4(VERTEX + vec3(0,0,-10), 1.0);
-	VERTEX = (PROJECTION_MATRIX * vec4(VERTEX , 1.0)).xyz;
-	CAMERA = INV_VIEW_MATRIX;
+	POSITION = vec4(VERTEX.xy, 1.0, 1.0);
 }
 
 float samplecloudmap(vec3 pos, float time) {
@@ -88,20 +86,20 @@ float samplecloudmap(vec3 pos, float time) {
 	//float posCutoff = abs(clamp(distance(clamp(pos.y, CloudFloor, CloudCeiling), pos.y), 0.0, 1.0) - 1.0);
 	//if (distance(clamp(pos.y, CloudFloor, CloudCeiling), pos.y) > 0.0){posCutoff = 1.0;}
 	pos /= SunshineClouds_CloudsGlobalScale;
-	
+
 	float largeScaleNoise = textureLod(SunshineClouds_LargeScaleNoiseTexture, pos * (SunshineClouds_CloudsLargeScaleNoiseScale) + (vec3(SunshineClouds_WindDirection.x, 0.0, SunshineClouds_WindDirection.y) * time * SunshineClouds_WindSpeed / 4.0), 100.0).r * SunshineClouds_CloudsLargeScaleNoisePower;
 	//largeScaleNoise += 1.0 - posCutoff;
 	if (posCutoff <= 0.0){return 0.0;}
 	//float largeScaleNoise = texture(LargeShapeNoiseTexture, vec3(pos.x, pos.y * 0.5, pos.z) * (large_scale_noise_scale) + vec3(WindDirection.x, 0.0, WindDirection.y) * time * WindSpeed / 3.0).r * large_scale_noise_power;
-	
+
 	//if (largeScaleNoise > 1.0){return 0.0;}
-	
+
 	heightScale = texture(SunshineClouds_HeightWeightGradient, vec2(heightScale, 0.0)).r;
-	
-	float noise = textureLod(SunshineClouds_BaseNoiseTexture, pos * (SunshineClouds_CloudsBaseNoiseScale) + vec3(SunshineClouds_WindDirection.x, 0.0, SunshineClouds_WindDirection.y) * time * SunshineClouds_WindSpeed, 100.0).r 
+
+	float noise = textureLod(SunshineClouds_BaseNoiseTexture, pos * (SunshineClouds_CloudsBaseNoiseScale) + vec3(SunshineClouds_WindDirection.x, 0.0, SunshineClouds_WindDirection.y) * time * SunshineClouds_WindSpeed, 100.0).r
 	+ textureLod(SunshineClouds_DetailNoiseTexture, pos * (SunshineClouds_CloudsDetailNoiseScale) - (vec3(SunshineClouds_WindDirection.x, 0.0, SunshineClouds_WindDirection.y) * time * SunshineClouds_WindSpeed / 3.0), 100.0).r * SunshineClouds_CloudsDetailNoisePower;
-	
-	
+
+
 	noise *= heightScale;
 	noise -= largeScaleNoise;
 	//noise = posCutoff;
@@ -133,38 +131,37 @@ void fragment() {
 	//if (linear_depth > 5900.0){
 		//linear_depth = 30000.0;
 	//}
-	
-	vec3 world = (CAMERA * vec4(VERTEX, 1.0)).xyz;
-	//// Get the camera position
-	vec3 camera = (CAMERA * vec4(0.0, 0.0, 0.0, 1.0)).xyz;
-	//
-	//// Raymarching direction
-	vec3 dir = normalize(world - camera);
-	
-	vec3 view_dir = normalize(dir);
-	
-	vec3 origin = world.xyz;
+
+	vec3 ro_world = INV_VIEW_MATRIX[3].xyz;
+	vec4 clipPos = vec4((FRAGCOORD.xy / VIEWPORT_SIZE.xy) * 2.0 - 1.0, FRAGCOORD.z, 1.0);
+	vec4 viewPos = INV_PROJECTION_MATRIX * clipPos;
+	vec3 rd_world = normalize(viewPos.xyz / viewPos.w);
+	rd_world = mat3(INV_VIEW_MATRIX) * rd_world;
+
+	vec3 view_dir = normalize(rd_world);
+	vec3 origin = ro_world;
+
 	float time = TIME;
-	
+
 	float dither = dither_matrix[int(FRAGCOORD.x + time * ditherspeed) % 4][int(FRAGCOORD.y + time  * ditherspeed) % 4];
-	
+
 	dither = (dither * StepDistanceClose * StartingPointNoisePower);
 	//dither -= (StepDistanceClose * StartingPointNoisePower) / 2.0;
 	origin += view_dir * dither;
-	
+
 	vec3 cur_pos = origin;
 	float cur_distance = 0.0;
 	float currentDensity = 0.0;
 	float thisDensity = 0.0;
 	vec3 currentColor = vec3(0.5);
 	float cutoffvalue = 0.0;
-	
+
 	if (cur_pos.y < SunshineClouds_CloudsFloor && view_dir.y < 0.0 || cur_pos.y > SunshineClouds_CloudsCeiling && view_dir.y > 0.0){discard;}
-	
+
 	for (int i = 0; i < StepCount; i++) {
 		cur_distance += mix(StepDistanceClose, StepDistanceFar, ease_out_quad(0.0,1.0,float(i) / float(StepCount)));
 		cur_pos = origin + view_dir * cur_distance;
-		
+
 		thisDensity = samplecloudmap(cur_pos, time)  * CloudDensity;
 		currentColor = mix(currentColor, SunshineClouds_SunColor.rgb, thisDensity);
 		currentDensity += thisDensity * smoothstep(linear_depth, linear_depth - StepDepthBlendRange, cur_distance);
@@ -176,16 +173,16 @@ void fragment() {
 	cur_pos += SunshineClouds_SunDirection * dither;
 	for (int j = 0; j < LightingStepCount; j++) {
 		shadow += (samplecloudmap(cur_pos, time) * CloudDensity);
-		
+
 		cur_pos += SunshineClouds_SunDirection * LightingStepDistance;
 	}
 	shadow /= float(LightingStepCount);
 	//currentDensity = clamp(currentDensity, 0.0, 1.0);
 	currentDensity = mix(clamp(currentDensity, 0.0, 1.0), 0.0, clamp(((cur_distance - CloudMaxDistance) / CloudMaxDistanceFalloff) + 1.0, 0.0, 1.0));
-	
+
 	//if (currentDensity < 0.001){
 		//discard;
-	//} 
+	//}
 	vec3 color = mix(SunshineClouds_AmbientColor.rgb, SunshineClouds_SunColor.rgb, clamp(1.0 - shadow, 0.0, 1.0));
 	//float fogStrength = mix(0.0, 1.0, clamp(cur_distance / CloudFogMaxDistance, 0.0, 1.0));
 	//color = mix(color, CloudFogColor, fogStrength);
@@ -193,11 +190,13 @@ void fragment() {
 		float fogStrength = mix(0.0, 1.0, clamp(cur_distance / CloudFogMaxDistance, 0.0, 1.0));
 		color = mix(color, SunshineClouds_FogColor.rgb, fogStrength);
 	}
-	
+
 
 	vec4 newColor = vec4(color, currentDensity);
-	
-	
+
+
 	ALBEDO = newColor.xyz;
 	ALPHA = newColor.a;
 }
+
+

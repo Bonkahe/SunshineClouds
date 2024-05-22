@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode skip_vertex_transform, cull_disabled;
+render_mode cull_disabled;
 render_mode unshaded;
 
 global uniform vec3 SunshineClouds_SunDirection;
@@ -74,7 +74,7 @@ const mat4 dither_matrix = mat4(
 void vertex() {
 	//time = TIME;
 	//POSITION = vec4(VERTEX + vec3(0,0,-10), 1.0);
-	VERTEX = (PROJECTION_MATRIX * vec4(VERTEX , 1.0)).xyz;
+	POSITION = vec4(VERTEX.xy, 1.0, 1.0);
 }
 
 float samplecloudmap(vec3 pos, float time) {
@@ -128,16 +128,15 @@ void fragment() {
 	view.xyz /= view.w;
 	float linear_depth = -view.z;
 	
-	vec3 world = (INV_VIEW_MATRIX * vec4(VERTEX, 1.0)).xyz;
-	//// Get the camera position
-	vec3 camera = (INV_VIEW_MATRIX * vec4(0.0, 0.0, 0.0, 1.0)).xyz;
-	//
-	//// Raymarching direction
-	vec3 dir = normalize(world - camera);
+	vec3 ro_world = INV_VIEW_MATRIX[3].xyz;
+	vec4 clipPos = vec4((FRAGCOORD.xy / VIEWPORT_SIZE.xy) * 2.0 - 1.0, FRAGCOORD.z, 1.0);
+	vec4 viewPos = INV_PROJECTION_MATRIX * clipPos;
+	vec3 rd_world = normalize(viewPos.xyz / viewPos.w);
+	rd_world = mat3(INV_VIEW_MATRIX) * rd_world;
 	
-	vec3 view_dir = normalize(dir);
+	vec3 view_dir = normalize(rd_world);
+	vec3 origin = ro_world;
 	
-	vec3 origin = world.xyz;
 	float time = TIME;
 	
 	float dither = dither_matrix[int(FRAGCOORD.x + time * ditherspeed) % 4][int(FRAGCOORD.y + time  * ditherspeed) % 4];
