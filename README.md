@@ -41,7 +41,6 @@ implemented in as many projects as easily as possible.
 That being said if you do anything in these regards by all means make a new repo and send me a message, I will make an addons section in this readme with a link to your project.
 
 ### Current outstanding issues
-* Slight depth error at edges of camera, more noticable at further distance, need to apply fisheye effect to depth to counteract this.
 * Need reliable way to implement global shader variables when the plugin is installed.
 
 
