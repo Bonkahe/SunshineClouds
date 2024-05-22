@@ -2,13 +2,17 @@
 
 # SunshineClouds
 
+## Updates:
+version 1.3:
+Added support for Godot 4.3, this is a breaking change, meaning that the cloud system as of this version will not support earlier versions of Godot, I apologize for this, but it is due to the reverse Z update for Godot, and unfortunately that was a little bit of a breaking update.
+
 Project breakdown and usage explanation:
 [https://www.youtube.com/watch?v=8GCqIHHNDrg](https://www.youtube.com/watch?v=8GCqIHHNDrg)
 
 This project is currently work in progress, but should be usable in game.
 Currently working on getting it on the Asset Library.
 
-A procedural cloud system for Godot 4.2 designed from the ground up to be as extendable, and barebones as possible while still looking as good as possible.
+A procedural cloud system for Godot 4.3 designed from the ground up to be as extendable, and barebones as possible while still looking as good as possible.
 
 ## Features
 * Fully volumetric clouds, extendable and performant up too 30km away from camera.
